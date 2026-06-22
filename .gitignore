@@ -1,0 +1,29 @@
+# Licensed fonts — do not distribute
+**/fonts/
+
+# Stray file at project root
+stocks.PNG
+
+# Incomplete prototype
+prototypes/idea-3-combined/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Editors
+.vscode/
+.idea/
+*.suo
+*.user

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "idea-1",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["prototypes/idea-1-quick-actions/server.cjs"],
+      "port": 8123
+    },
+    {
+      "name": "idea-2",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["prototypes/idea-2-long-press-pills/server.cjs"],
+      "port": 8124
+    },
+    {
+      "name": "idea-3",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["prototypes/idea-3-combined/server.cjs"],
+      "port": 8125
+    }
+  ]
+}

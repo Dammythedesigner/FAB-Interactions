@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idea 2 — Long-press pills FAB</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="canvas">
+<div class="phone">
+
+  <!-- HOME -->
+  <div class="screen" id="home">
+    <img class="bg" src="assets/home.png" alt="Home screen">
+  </div>
+
+  <!-- soft white fade implying scrollable content -->
+  <div class="bottom-fade"></div>
+
+  <!-- scrim — transparent tap-catcher to dismiss pills -->
+  <div class="scrim" id="scrim"></div>
+
+  <!-- pill stack (fans upward from FAB on long-press) -->
+  <!-- DOM order: top pill first, bottom pill last (flex-direction:column, bottom-anchored) -->
+  <!-- Stagger --i:0 = closest to FAB (first to animate in), --i:6 = furthest (last) -->
+  <div class="pill-stack" id="pill-stack">
+    <div class="pill" data-action="emergency"  style="--i:6"><img src="assets/pill-emergency.png"  alt="Emergency"></div>
+    <div class="pill" data-action="ng-stocks"  style="--i:5"><img src="assets/pill-ng-stocks.png"  alt="NG Stocks"></div>
+    <div class="pill" data-action="naira"      style="--i:4"><img src="assets/pill-naira-mutual-funds.png"  alt="Naira Mutual Funds"></div>
+    <div class="pill" data-action="dollar"     style="--i:3"><img src="assets/pill-dollar-mutual-funds.png" alt="Dollar Mutual Funds"></div>
+    <div class="pill" data-action="money-duo"  style="--i:2"><img src="assets/pill-money-duo.png"  alt="Money Duo"></div>
+    <div class="pill" data-action="football"   style="--i:1"><img src="assets/pill-football.png"   alt="Football Circle"></div>
+    <div class="pill" data-action="basketball" style="--i:0"><img src="assets/pill-basketball.png" alt="Basketball Circle"></div>
+  </div>
+
+  <!-- bottom bar: nav only — z-index below the scrim so it dims with the overlay -->
+  <div class="bottombar">
+    <nav class="nav glass">
+      <button class="nav-item active" aria-current="page">
+        <svg viewBox="57 44 23 22" fill="none" aria-hidden="true">
+          <path d="M76.8281 53.3018V64.3643H71.4062C71.413 64.2847 71.418 64.2043 71.418 64.123V58.8633C71.4177 57.2945 70.146 56.0227 68.5771 56.0225C67.0081 56.0225 65.7356 57.2943 65.7354 58.8633V64.123C65.7354 64.2043 65.7404 64.2847 65.7471 64.3643H60.3252V53.3018L68.7275 51.126L76.8281 53.3018Z" fill="currentColor"/>
+          <path d="M59.7144 51.0239L68.5356 48.4883L77.2851 51.0239" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M58.9702 48.3872L68.5389 45.6367L78.0297 48.3872" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+        <span class="lbl">Overview</span>
+      </button>
+      <button class="nav-item">
+        <svg viewBox="150 44 17 21" fill="none" aria-hidden="true">
+          <path d="M154.031 51.1047C157.067 48.2839 160.899 48.2841 163.637 51.1047" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M151.971 49.558C156.309 45.5273 161.785 45.5276 165.697 49.558" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M158.809 51.2754L153.551 64.0337L158.809 61.8733L164.067 64.0337L158.809 51.2754Z" fill="currentColor"/>
+        </svg>
+        <span class="lbl">Learn</span>
+      </button>
+      <button class="nav-item">
+        <svg viewBox="239 44 20 21" fill="none" aria-hidden="true">
+          <path d="M257.309 63.4655V51.5754H241.024V60.4655C241.024 62.1224 242.368 63.4655 244.024 63.4655H257.309Z" fill="currentColor"/>
+          <path d="M241.024 51.5754V60.4655C241.024 62.1224 242.368 63.4655 244.024 63.4655H257.309V51.5754H241.024ZM241.024 51.5754C241.024 51.5754 241.024 50.4758 241.024 49.4916C241.024 47.8588 242.348 46.5352 243.981 46.5352H257.309M241.024 51.5754L241.579 50.6041C242.113 49.6689 243.107 49.0916 244.184 49.0916H257.309" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="253.507" cy="56.9629" r="2.5" fill="#fff"/>
+        </svg>
+        <span class="lbl">Stash</span>
+      </button>
+    </nav>
+    <!-- spacer keeps nav from stretching into FAB's footprint -->
+    <div class="fab-spacer"></div>
+  </div>
+
+  <!-- FAB lives outside the bottombar so it sits above the scrim independently -->
+  <button class="fab blue" id="fab" aria-label="Quick actions">
+    <span class="ic plus"><svg viewBox="40 32 64 64" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M71.6183 54.7401C71.3138 54.8334 70.9965 55.1577 70.9043 55.4716C70.8436 55.6757 70.8331 56.2194 70.8331 59.2714V62.8332H67.2713C63.2335 62.8332 63.3863 62.8204 63.0235 63.1832C62.9119 63.288 62.8229 63.4145 62.7621 63.5549C62.7013 63.6954 62.6699 63.8468 62.6699 63.9999C62.6699 64.1529 62.7013 64.3044 62.7621 64.4448C62.8229 64.5853 62.9119 64.7118 63.0235 64.8166C63.3863 65.1794 63.2335 65.1666 67.2713 65.1666H70.8331V68.7517C70.8331 72.8012 70.8168 72.6099 71.1901 72.9832C71.4001 73.1921 71.7245 73.3332 71.9998 73.3332C72.2763 73.3332 72.5995 73.1932 72.813 72.9797C73.1793 72.6122 73.1665 72.7721 73.1665 68.7284V65.1666H76.7283C80.772 65.1666 80.6121 65.1794 80.9796 64.8131C81.1931 64.5996 81.3331 64.2764 81.3331 63.9999C81.3331 63.7234 81.1931 63.4002 80.9796 63.1867C80.6121 62.8204 80.772 62.8332 76.7283 62.8332H73.1665V59.2714C73.1665 55.2277 73.1793 55.3876 72.813 55.0201C72.4875 54.6946 72.078 54.5989 71.6183 54.7401Z"/></svg></span>
+    <span class="ic x"><svg viewBox="40 32 64 64" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M65.1789 57.7251C65.0295 58.0064 65.0345 58.4601 65.1912 58.7472C65.2927 58.9345 65.6697 59.3264 67.8278 61.4844L70.3464 64.003L67.8278 66.5216C64.9726 69.3768 65.0716 69.2597 65.0716 69.7728C65.0668 69.9258 65.0933 70.0781 65.1496 70.2204C65.206 70.3628 65.2909 70.492 65.3991 70.6003C65.5073 70.7085 65.6366 70.7934 65.7789 70.8497C65.9212 70.906 66.0736 70.9326 66.2266 70.9277C66.7397 70.9277 66.6225 71.0267 69.4777 68.1716L71.9963 65.653L74.5314 68.1881C77.3948 71.0515 77.248 70.9277 77.776 70.9277C78.0721 70.9269 78.4013 70.7974 78.596 70.6027C78.7915 70.4072 78.921 70.0797 78.921 69.7777C78.9202 69.2588 79.0241 69.3809 76.1648 66.5216L73.6462 64.003L76.1648 61.4844C79.0241 58.6251 78.9202 58.7472 78.921 58.2283C78.921 57.9264 78.7915 57.5989 78.596 57.4034C78.4005 57.2079 78.0729 57.0783 77.771 57.0783C77.2521 57.0792 77.3742 56.9752 74.5149 59.8345L71.9963 62.3531L69.4777 59.8345C66.6184 56.9752 66.7405 57.0792 66.2216 57.0783C65.7613 57.0783 65.4041 57.3003 65.1789 57.7251Z"/></svg></span>
+  </button>
+
+  <!-- NG Stocks screen (slides in from right) -->
+  <div class="stocks-screen" id="stocks">
+    <img class="bg" src="assets/stocks.PNG" alt="NG Stocks">
+    <div class="st-back" id="st-back"></div>
+  </div>
+
+  <!-- fixed status bar strip -->
+  <div class="statusbar-fixed" id="statusbar-fixed"></div>
+
+</div>
+
+<!-- external controls -->
+<div class="controls" id="controls">
+  <span class="lab">FAB style</span>
+  <div class="seg" id="styleseg">
+    <button class="active" data-style="blue">Blue</button>
+    <button data-style="glass">Glass</button>
+  </div>
+</div>
+</div><!-- /canvas -->
+
+<script src="app.js"></script>
+</body>
+</html>

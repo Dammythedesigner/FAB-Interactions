@@ -1,0 +1,172 @@
+/* ---------- Fonts ---------- */
+@font-face { font-family: "BR Firma"; src: url("fonts/BRFirma-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "BR Firma"; src: url("fonts/BRFirma-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "BR Firma"; src: url("fonts/BRFirma-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "BR Firma"; src: url("fonts/BRFirma-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "BR Firma"; src: url("fonts/BRFirma-Black.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
+
+/* ---------- Tokens ---------- */
+:root{
+  --blue: #0069fe;
+  --navy: #06214d;
+  --ink: #19191a;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --spring: cubic-bezier(.34,1.28,.44,1);
+}
+
+*{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html,body{ margin:0; }
+body{
+  font-family:"BR Firma", system-ui, sans-serif;
+  background: #f5f5f5;
+  color: var(--ink);
+  min-height:100dvh;
+  display:grid; place-content:center;
+}
+.canvas{
+  display:flex; flex-direction:column; align-items:center;
+  gap:22px; padding:28px 16px;
+  width:fit-content;
+}
+
+/* ---------- Phone shell ---------- */
+.phone{
+  position:relative; flex:0 0 auto; width:min(393px, 94vw); aspect-ratio:393 / 852;
+  background:#fff; border-radius:32px;
+  box-shadow: 0 20px 60px -20px rgba(16,24,40,.18);
+  overflow:hidden; isolation:isolate;
+}
+
+/* ---------- Scroll surface ---------- */
+.screen{ position:absolute; inset:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; background:#fff; }
+.screen::-webkit-scrollbar{ display:none; }
+.bg{ display:block; width:100%; height:auto; }
+
+/* fixed status bar strip */
+.statusbar-fixed{ position:absolute; top:0; left:0; right:0; height:84px; z-index:60; pointer-events:none;
+  background:url("assets/home.png") no-repeat top center; background-size:100% auto;
+  -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 40px, transparent 84px);
+  mask-image:linear-gradient(to bottom, #000 0, #000 40px, transparent 84px);
+  transition: opacity .25s ease; }
+.statusbar-fixed.pills-open{ opacity:0; }
+.statusbar-fixed.compact{ height:68px;
+  -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 50px, transparent 68px);
+  mask-image:linear-gradient(to bottom, #000 0, #000 50px, transparent 68px); }
+
+/* soft white fade at bottom */
+.bottom-fade{ position:absolute; left:0; right:0; bottom:0; height:180px; z-index:20; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,.55) 45%, rgba(255,255,255,.92) 100%); }
+
+/* ---------- Scrim ---------- */
+.scrim{ position:absolute; inset:0; z-index:25; background:rgba(0,0,0,.75); visibility:hidden; opacity:0;
+  transition:opacity .25s ease, visibility .25s; }
+.scrim.show{ visibility:visible; opacity:1; }
+
+/* ---------- Bottom bar ---------- */
+/* z-index:22 puts the nav BELOW the scrim (z-index:25) → nav dims with the overlay */
+.bottombar{ position:absolute; left:0; right:0; bottom:0; z-index:22; pointer-events:none;
+  display:flex; align-items:center; gap:12px; padding:0 24px 24px; }
+
+/* invisible spacer reserves the FAB footprint so the nav doesn't stretch behind it */
+.fab-spacer{ flex:0 0 62px; height:62px; pointer-events:none; }
+
+.nav{ flex:1 1 auto; pointer-events:auto; display:flex; align-items:stretch; justify-content:space-between;
+  height:62px; border-radius:999px; padding:6px; }
+.nav.glass{ background:rgba(245,245,245,.5); backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  box-shadow:0 12px 28px -14px rgba(16,24,40,.35), inset 0 0 0 1px rgba(255,255,255,.55); }
+.nav-item{ flex:1 1 0; border:0; background:transparent; font-family:inherit; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  padding:0; border-radius:999px; color:#6683a6; transition:background .18s ease; }
+.nav-item svg{ height:24px; width:auto; display:block; transform:translateY(5px); }
+.nav-item .lbl{ font-size:11px; font-weight:600; line-height:18px; letter-spacing:-0.02em; color:#19191a; transform:translateY(1.5px); }
+.nav-item.active{ color:#0069fe; background:rgba(255,255,255,.6); box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
+.nav-item.active .lbl{ color:#0069fe; }
+
+/* ---------- FAB ---------- */
+/* Absolutely positioned independently of bottombar so it stays above the scrim (z-index:25) */
+.fab{ position:absolute; right:24px; bottom:24px; width:62px; height:62px; border:0; padding:0; border-radius:50%; cursor:pointer; pointer-events:auto;
+  display:grid; place-items:center; transition:transform .18s var(--ease), background .25s ease, box-shadow .25s ease;
+  z-index:40; user-select:none; -webkit-user-select:none; }
+.fab:active{ transform:scale(.92); }
+.fab .ic{ position:absolute; width:62px; height:62px; transition:opacity .22s var(--ease), transform .32s var(--ease); }
+.fab .ic svg{ width:100%; height:100%; display:block; }
+.fab .ic.x{ opacity:0; transform:rotate(-90deg) scale(.6); }
+.fab .ic.plus{ opacity:1; transform:rotate(0) scale(1); }
+.fab.open .ic.plus{ opacity:0; transform:rotate(90deg) scale(.6); }
+.fab.open .ic.x{ opacity:1; transform:rotate(0) scale(1); }
+
+.fab.blue{ background:linear-gradient(180deg,#1f86ff,#0069fe 60%,#0061ec);
+  box-shadow:0 6px 16px -4px rgba(0,90,230,.22), inset 0 1px 0 rgba(255,255,255,.35); color:#fff; }
+.fab.blue .ic{ color:#fff; }
+.fab.glass{ background:rgba(245,245,245,.55); backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+  box-shadow:0 8px 22px rgba(16,24,40,.16), inset 0 0 0 1px rgba(255,255,255,.6); color:#516b8b; }
+.fab.glass .ic{ color:#516b8b; }
+
+/* ---------- Pill stack ---------- */
+/*
+  Container is bottom-anchored at 102px (24 padding + 62 FAB + 16 gap).
+  flex-direction:column means first child is at the top of the stack
+  (furthest from FAB) and last child is at the bottom (closest to FAB).
+*/
+.pill-stack{
+  position:absolute;
+  right:24px;
+  bottom:102px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:20px;
+  z-index:35;
+  pointer-events:none;
+}
+
+.pill{
+  cursor:pointer;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(12px) scale(.92);
+  transition:
+    opacity .14s ease calc(var(--i, 0) * 18ms),
+    transform .18s var(--spring) calc(var(--i, 0) * 18ms);
+}
+.pill img{ display:block; height:auto; max-height:46px; width:auto; }
+
+/* pills open: stagger from bottom (--i:0) upward */
+.pill-stack.open .pill{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  pointer-events:auto;
+}
+
+/* pills close: reverse burst — top pill first, Basketball last */
+.pill-stack.closing .pill{
+  opacity:0;
+  transform:translateY(12px) scale(.92);
+  transition:
+    opacity  .14s ease        calc((6 - var(--i, 0)) * 18ms),
+    transform .18s var(--ease) calc((6 - var(--i, 0)) * 18ms);
+}
+
+/* ---------- Stocks screen ---------- */
+.stocks-screen{ position:absolute; inset:0; z-index:50; background:#fff; overflow-y:auto; scrollbar-width:none;
+  transform:translateX(100%); transition:transform .42s var(--ease); }
+.stocks-screen::-webkit-scrollbar{ display:none; }
+.stocks-screen.show{ transform:translateX(0); }
+
+/* parallax on home when stocks pushes in */
+.screen#home{ transition:transform .42s var(--ease); }
+.screen#home.pushed{ transform:translateX(-24%); }
+
+/* invisible hit-area over the baked-in back chevron */
+.st-back{ position:absolute; top:54px; left:12px; z-index:2; width:56px; height:56px; border-radius:50%; cursor:pointer; }
+
+/* ---------- External controls ---------- */
+.controls{ display:flex; align-items:center; gap:14px; background:#fff; padding:10px 12px; border-radius:16px;
+  box-shadow:0 10px 30px rgba(16,24,40,.12); font-size:14px; }
+.controls.hidden{ display:none; }
+.controls .lab{ font-weight:600; color:#475569; padding-left:6px; }
+.seg{ display:flex; background:#eef1f5; border-radius:11px; padding:3px; }
+.seg button{ border:0; background:transparent; font-family:inherit; font-weight:600; font-size:14px; color:#64748b;
+  padding:8px 16px; border-radius:9px; cursor:pointer; transition:.18s; }
+.seg button.active{ background:#fff; color:var(--blue); box-shadow:0 2px 6px rgba(16,24,40,.12); }
